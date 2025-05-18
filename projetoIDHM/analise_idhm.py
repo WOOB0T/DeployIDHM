@@ -32,6 +32,17 @@ def plot_evolucao_idhm_negra(df_cor):
     
     plt.figure(figsize=FIG_SIZE)
     sns.lineplot(data=df_negra, x='ANO', y='IDHM', marker='o', color=COLOR_PALETTE[1])
+
+    for i, row in df_negra.iterrows():
+        plt.text(row['ANO'], row['IDHM'] + 0.001, f"{row['IDHM']:.3f}", 
+                ha='center', va='bottom', fontsize=9)
+
+    plt.ylim(0.690, 0.750)
+
+    plt.xticks(df_negra['ANO'].unique())
+    
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
     plt.title('Evolução do IDHM da População Negra no Brasil (2012–2021)')
     plt.ylabel('IDHM')
     plt.xlabel('Ano')
@@ -44,8 +55,29 @@ def plot_idhm_renda_raca_2021(df_cor):
     df_branca_negra = df_2021[df_2021['COR'].isin(['BRANCO', 'NEGRO'])]
     
     plt.figure(figsize=(8, 5))
-    sns.barplot(data=df_branca_negra, x='COR', y='IDHM_R', 
-                palette=[COLOR_PALETTE[2], COLOR_PALETTE[0]], hue='COR')
+    ax = sns.barplot(
+        data=df_branca_negra,
+        x='COR',
+        y='IDHM_R',
+        palette=[COLOR_PALETTE[2], COLOR_PALETTE[0]],
+        hue='COR',
+        width=0.4  
+    )
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(
+            p.get_x() + p.get_width() / 2,
+            height + 0.001,  
+            f'{height:.3f}',
+            ha='center',
+            va='bottom',
+            fontsize=8,
+            fontweight='bold'
+        )
+
+    ax.set_ylim(0, 0.80)
     plt.title('IDHM de Renda por Raça/Cor - Brasil (2021)')
     plt.ylabel('IDHM de Renda')
     plt.xlabel('Raça/Cor')
@@ -59,8 +91,23 @@ def plot_idhm_longevidade_raca(df_cor):
                     (df_cor['COR'].isin(['BRANCO', 'NEGRO']))]
     
     plt.figure(figsize=FIG_SIZE)
-    sns.barplot(data=df_long, x='ANO', y='IDHM_L', hue='COR', 
-                palette=[COLOR_PALETTE[2], COLOR_PALETTE[0]])
+    ax = sns.barplot(data=df_long, x='ANO', y='IDHM_L', hue='COR', 
+                palette=[COLOR_PALETTE[2], COLOR_PALETTE[0]], width=0.5)
+    
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(
+            p.get_x() + p.get_width() / 2,
+            height + 0.001,  
+            f'{height:.3f}',
+            ha='center',
+            va='bottom',
+            fontsize=8,
+            fontweight='bold'
+        )
+        
     plt.title('IDHM de Longevidade por Raça/Cor - Brasil (2012 vs 2021)')
     plt.ylabel('IDHM de Longevidade')
     plt.xlabel('Ano')
@@ -97,8 +144,22 @@ def plot_idhm_renda_sexo_2021(df_sexo):
     df_2021 = df_sexo[(df_sexo['ANO'] == 2021) & (df_sexo['AGREGACAO'] == 'BRASIL')]
     
     plt.figure(figsize=FIG_SIZE)
-    sns.barplot(data=df_2021, x='SEXO', y='IDHM_R', hue='SEXO', 
-                palette=COLOR_PALETTE[0:2], dodge=False, legend=False)
+    ax = sns.barplot(data=df_2021, x='SEXO', y='IDHM_R', hue='SEXO', 
+                palette=COLOR_PALETTE[0:2], dodge=False, legend=False, width=0.4)
+    
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(
+            p.get_x() + p.get_width() / 2,
+            height + 0.001,  
+            f'{height:.3f}',
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            fontweight='bold'
+        )
     
     plt.ylim(0.000, 0.800)
     plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
@@ -163,7 +224,6 @@ def plot_disparidade_educacao_sexo(df_sexo):
     plt.clf()
 
 def plot_idhm_mulheres_regioes(df_sexo, df_idhm):
-    # Define regions
     regioes = {
         'Norte': ['Acre', 'Amapá', 'Amazonas', 'Pará', 'Rondônia', 'Roraima', 'Tocantins'],
         'Sul': ['Paraná', 'Rio Grande do Sul', 'Santa Catarina']
@@ -184,14 +244,28 @@ def plot_idhm_mulheres_regioes(df_sexo, df_idhm):
     })
     
     plt.figure(figsize=FIG_SIZE)
-    sns.barplot(
+    ax = sns.barplot(
         data=df_regioes,
         x='Região',
         y='IDHM Médio (Mulheres)',
         hue='Região',
         palette=COLOR_PALETTE[0:2],
-        legend=False
+        legend=False,
+        width=0.5
     )
+
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(
+            p.get_x() + p.get_width() / 2,
+            height + 0.001,  
+            f'{height:.3f}',
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            fontweight='bold'
+        )
+    
     plt.title('IDHM Médio de Mulheres - Sul vs Norte (2021)')
     plt.ylabel('IDHM')
     plt.xlabel('Região')
@@ -226,10 +300,10 @@ def plot_idhm_regioes_agrupadas(df_idhm):
     
     plt.figure(figsize=FIG_SIZE)
     ax = sns.barplot(data=media_agrupada, x='Agrupamento', y='IDHM', 
-                     palette=COLOR_PALETTE[3:5], hue='Agrupamento')
+                     palette=COLOR_PALETTE[3:5], hue='Agrupamento', width=0.5)
     
     for i, row in media_agrupada.iterrows():
-        ax.text(i, row['IDHM'] + 0.009, f"{row['IDHM']:.3f}",
+        ax.text(i, row['IDHM'] + 0.005, f"{row['IDHM']:.3f}",
                 ha='center', va='top', color='black', fontweight='bold')
     
     info_text = "\n".join([
@@ -269,7 +343,7 @@ def plot_comparacao_regioes(df_idhm):
     
     plt.figure(figsize=FIG_SIZE)
     ax = sns.barplot(data=media_regioes, x='REGIAO', y='IDHM', 
-                     palette=COLOR_PALETTE[4:6], hue='REGIAO',
+                     palette=COLOR_PALETTE[4:6], hue='REGIAO', width=0.5,
                      order=['Nordeste', 'Centro-Oeste'],
                      estimator=np.mean, errorbar=None)
     
@@ -313,6 +387,8 @@ def plot_comparacao_pe_to(df_idhm):
                     palette=COLOR_PALETTE[0:2],
                     saturation=0.8)
     
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
     for patch in ax.patches:
         height = patch.get_height()
         if height > 0:
@@ -372,20 +448,26 @@ def plot_comparacao_sp_to(df_idhm):
         y='Valor',
         hue='NOME',
         palette=COLOR_PALETTE[1:3],
+        width=0.5,
         saturation=0.8
     )
-    
+
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
+
     for patch in ax.patches:
-        ax.text(
-            patch.get_x() + patch.get_width() / 2,
-            patch.get_height() + 0.003,
-            f"{patch.get_height():.3f}",
-            ha='center',
-            va='bottom',
-            color='black',
-            fontsize=9,
-            bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=0.5)
-        )
+        height = patch.get_height()
+        if height > 0:  # evita imprimir valores 0.000
+            ax.text(
+                patch.get_x() + patch.get_width() / 2,
+                height + 0.001,
+                f"{height:.3f}",
+                ha='center',
+                va='bottom',
+                color='black',
+                fontsize=9,
+                bbox=dict(facecolor='white', alpha=0.7, edgecolor='none', pad=0.5)
+            )
+
     
     leg = ax.legend(
         title='Cidade',
