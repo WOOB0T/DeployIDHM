@@ -17,6 +17,8 @@ def carregar_dados():
     BASE_DIR = os.path.dirname(__file__)
     arquivo = os.path.join(BASE_DIR, "dados", "idhm_bd.xlsx")
     abas = pd.ExcelFile(arquivo).sheet_names
+    print(arquivo)
+    print(abas)
     
     COLUNAS = ["ANO", "AGREGACAO", "CODIGO", "NOME", "IDHM", "IDHM_L", "IDHM_E", "IDHM_R", "IDHMAD", "IDHMAD_L", "ESPVIDA"]
     df_idhm = pd.read_excel(arquivo, sheet_name='Base de Dados', usecols=COLUNAS)
