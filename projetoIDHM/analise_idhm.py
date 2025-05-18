@@ -13,7 +13,7 @@ sns.set_palette(COLOR_PALETTE)
 FIG_SIZE = (10, 6)
 
 def carregar_dados():
-    arquivo = "./dados/idhm_bd.xlsx"
+    arquivo = "dados/idhm_bd.xlsx"
     abas = pd.ExcelFile(arquivo).sheet_names
     
     COLUNAS = ["ANO", "AGREGACAO", "CODIGO", "NOME", "IDHM", "IDHM_L", "IDHM_E", "IDHM_R", "IDHMAD", "IDHMAD_L", "ESPVIDA"]
