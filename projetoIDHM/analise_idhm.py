@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 import numpy as np
 import re
+import os
 from matplotlib.patches import Patch
 
 COLOR_PALETTE = ['#6AF307', '#38A6B7', '#15DDCE', '#0AE885', '#15D84A', '#0AEAFC']
@@ -13,7 +14,8 @@ sns.set_palette(COLOR_PALETTE)
 FIG_SIZE = (10, 6)
 
 def carregar_dados():
-    arquivo = "dados/idhm_bd.xlsx"
+    BASE_DIR = os.path.dirname(__file__)
+    arquivo = os.path.join(BASE_DIR, "dados", "idhm_bd.xlsx")
     abas = pd.ExcelFile(arquivo).sheet_names
     
     COLUNAS = ["ANO", "AGREGACAO", "CODIGO", "NOME", "IDHM", "IDHM_L", "IDHM_E", "IDHM_R", "IDHMAD", "IDHMAD_L", "ESPVIDA"]
