@@ -385,7 +385,8 @@ def plot_comparacao_pe_to(df_idhm):
                     y='Valor',
                     hue='NOME',
                     palette=COLOR_PALETTE[0:2],
-                    saturation=0.8)
+                    saturation=0.8,
+                    width=0.8)
     
     plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
 
@@ -421,11 +422,11 @@ def plot_comparacao_pe_to(df_idhm):
     st.pyplot(plt)
     plt.clf()
 
-def plot_comparacao_sp_to(df_idhm):
+def plot_comparacao_sp_pb(df_idhm):
     df_cidades = df_idhm[
         (df_idhm['ANO'] == 2021) &
         (df_idhm['AGREGACAO'] == 'RM_RIDE') &
-        (df_idhm['NOME'].isin(['Região Metropolitana de São Paulo (SP)', 'Região Metropolitana de Tocantins (TO)']))
+        (df_idhm['NOME'].isin(['Região Metropolitana de São Paulo (SP)', 'Região Metropolitana de João Pessoa (PB)']))
     ][['NOME', 'IDHM', 'IDHM_E', 'IDHM_R', 'IDHM_L']].copy()
     
     df_cidades_melt = df_cidades.melt(
@@ -448,7 +449,7 @@ def plot_comparacao_sp_to(df_idhm):
         y='Valor',
         hue='NOME',
         palette=COLOR_PALETTE[1:3],
-        width=0.5,
+        width=0.8,
         saturation=0.8
     )
 
@@ -456,7 +457,7 @@ def plot_comparacao_sp_to(df_idhm):
 
     for patch in ax.patches:
         height = patch.get_height()
-        if height > 0:  # evita imprimir valores 0.000
+        if height > 0: 
             ax.text(
                 patch.get_x() + patch.get_width() / 2,
                 height + 0.001,
@@ -480,7 +481,7 @@ def plot_comparacao_sp_to(df_idhm):
     leg.get_frame().set_linewidth(0.5)
     
     ax.set_xticklabels(['IDHM Geral', 'Educação', 'Longevidade', 'Renda'])
-    plt.title('Comparação dos Subíndices do IDHM: São Paulo vs Palmas (2021)', pad=15, fontsize=12)
+    plt.title('Comparação dos Subíndices do IDHM: São Paulo vs João Pessoa (2021)', pad=15, fontsize=12)
     plt.ylabel('Valor do Índice', labelpad=8, fontsize=10)
     plt.xlabel('')
     plt.ylim(0.60, 0.90)
@@ -647,10 +648,8 @@ def main():
     com foco em disparidades regionais, de gênero e raça/cor.
     """)
     
-    # Load data
     df_idhm, df_cor, df_sexo = carregar_dados()
     
-    # Create tabs
     tab1, tab2, tab3, tab4 = st.tabs(["Visão Geral", "Análise por Raça/Cor", "Análise por Gênero", "Análise Regional"])
     
     with tab1:
@@ -733,7 +732,7 @@ def main():
         
         with col2:
             st.subheader("Comparação SP vs TO (2021)")
-            plot_comparacao_sp_to(df_idhm)
+            plot_comparacao_sp_pb(df_idhm)
 
 if __name__ == "__main__":
     main()
